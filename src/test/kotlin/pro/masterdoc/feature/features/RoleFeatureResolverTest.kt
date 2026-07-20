@@ -18,4 +18,11 @@ class RoleFeatureResolverTest {
         val features = resolver.resolve(listOf("engineer"))
         assertTrue(features.contains("copilot"))
     }
+
+    @Test
+    fun `technologist role gets charts and equipment features`() {
+        val features = resolver.resolve(listOf("technologist"))
+        assertTrue(features.contains("charts"))
+        assertTrue(features.contains("equipment"))
+    }
 }

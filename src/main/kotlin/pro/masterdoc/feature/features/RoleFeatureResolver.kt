@@ -11,6 +11,10 @@ class RoleFeatureResolver {
             when (role) {
                 "dispatcher" -> features.add("board")
                 "engineer" -> features.add("copilot")
+                "technologist" -> {
+                    features.add("charts")
+                    features.add("equipment")
+                }
             }
         }
         return features.toList()
