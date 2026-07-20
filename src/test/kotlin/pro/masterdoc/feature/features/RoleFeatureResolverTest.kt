@@ -25,4 +25,10 @@ class RoleFeatureResolverTest {
         assertTrue(features.contains("charts"))
         assertTrue(features.contains("equipment"))
     }
+
+    @Test
+    fun `admin role gets user_invite feature`() {
+        val features = resolver.resolve(listOf("admin"))
+        assertTrue(features.contains("user_invite"))
+    }
 }
