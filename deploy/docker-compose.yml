@@ -7,6 +7,10 @@ services:
     restart: unless-stopped
     ports:
       - "${FEATURE_SERVICE_PORT:-8082}:8082"
+    # DNS inside Docker often cannot resolve public IdP host; route via host nginx.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "auth.fixaverse.ru:host-gateway"
     environment:
       SERVER_PORT: "8082"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${ZITADEL_ISSUER:-}
