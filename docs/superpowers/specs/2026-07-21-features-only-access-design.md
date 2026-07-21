@@ -182,9 +182,9 @@ Do **not** rewrite Zitadel upstream API field names in code that talks to Manage
 
 ## Testing plan (acceptance)
 
-- [ ] Dispatcher-equivalent user: JWT grants `board` → `/me` returns `features:["board"]`, no `userInfo.roles`.
-- [ ] Admin-equivalent: grant `user_invite` → can open Users and invite with e.g. `["charts","equipment"]`.
-- [ ] Invitee’s next `/me` returns exactly the assigned known features.
+- [ ] User with JWT grant `board` → `/me` returns `features:["board"]`, no `userInfo.roles`.
+- [ ] User with grant `user_invite` → can open Users and invite with e.g. `["charts","equipment"]`.
+- [ ] Invitee’s next `/me` returns exactly the assigned known features (sorted).
 - [ ] Client Users UI: list + invite by email with feature checkboxes; no role terminology in UI copy.
 - [ ] Gateway OpenAPI and feature-service README mention features only for product access.
 
@@ -192,4 +192,4 @@ Do **not** rewrite Zitadel upstream API field names in code that talks to Manage
 
 - Production grant migration script for old keys → new feature keys
 - Expanding catalog (`tickets`, `map`, …)
-- Editing features from list row UI beyond replace-endpoint wiring (MVP: invite + list; PUT may ship with list later in same plan if cheap)
+- Client UI to edit an existing user’s features via `PUT` (gateway ships `PUT /admin/users/{id}/features` in this change; list-row editor can follow)
