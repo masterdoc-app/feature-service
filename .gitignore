@@ -10,3 +10,6 @@ out/
 .env.*
 !deploy/.env.example
 runtime.env
+
+# IDE / accidental compile output
+bin/
