@@ -6,9 +6,9 @@ Spring Boot (Kotlin) service that tells the client which product modules to asse
 
 Header: `Authorization: Bearer <Zitadel access_token>`
 
-Returns `userInfo` (id, name, email, roles) plus the enabled `features` for those roles.
+Returns `userInfo` (id, name, email) plus the enabled `features` from the JWT project grants.
 
-Example (dispatcher):
+Example (board + user_invite):
 
 ```json
 {
@@ -16,22 +16,23 @@ Example (dispatcher):
     "id": "…",
     "givenName": "Ivan",
     "familyName": "Petrov",
-    "email": "ivan@example.com",
-    "roles": ["dispatcher"]
+    "email": "ivan@example.com"
   },
-  "features": ["board"]
+  "features": ["board", "user_invite"]
 }
 ```
 
-### Role → features (MVP)
+### MVP feature catalog
 
-| Role | Features |
-|------|----------|
-| `dispatcher` | `board` |
-| `engineer` | `copilot` |
-| other | _(none)_ |
+| Wire value | Meaning |
+|------------|---------|
+| `board` | Board |
+| `copilot` | Copilot |
+| `charts` | Charts |
+| `equipment` | Equipment |
+| `user_invite` | Users admin (invite / list) |
 
-Identity and roles come from the Zitadel JWT (claims). This service does **not** store passwords or replace the IdP.
+Grant keys in the Zitadel JWT that are not in this catalog are ignored. This service does **not** store passwords or replace the IdP.
 
 ## What this service is not
 

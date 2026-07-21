@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.context.TestPropertySource
@@ -27,7 +26,7 @@ class MeControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @Test
-    fun `getMe for dispatcher returns board feature and userInfo`() {
+    fun `getMe returns features from grant keys without roles field`() {
         val token = Jwt.withTokenValue("test-token")
             .header("alg", "none")
             .subject("user-1")
@@ -36,36 +35,33 @@ class MeControllerTest {
             .claim("email", "ivan@example.com")
             .claim(
                 "urn:zitadel:iam:org:project:roles",
-                mapOf("dispatcher" to mapOf("project-id" to "zitadel.localhost")),
+                mapOf("board" to mapOf("project-id" to "zitadel.localhost")),
             )
             .issuedAt(Instant.now())
             .expiresAt(Instant.now().plusSeconds(3600))
             .build()
 
         mockMvc.get("/me") {
-            with(
-                jwt()
-                    .jwt(token)
-                    .authorities(SimpleGrantedAuthority("ROLE_dispatcher")),
-            )
+            with(jwt().jwt(token))
         }.andExpect {
             status { isOk() }
             jsonPath("$.userInfo.id") { value("user-1") }
             jsonPath("$.userInfo.givenName") { value("Ivan") }
             jsonPath("$.userInfo.familyName") { value("Petrov") }
             jsonPath("$.userInfo.email") { value("ivan@example.com") }
+            jsonPath("$.userInfo.roles") { doesNotExist() }
             jsonPath("$.features[0]") { value("board") }
         }
     }
 
     @Test
-    fun `getMe for engineer returns copilot feature`() {
+    fun `getMe for copilot grant returns copilot feature`() {
         val token = Jwt.withTokenValue("test-token")
             .header("alg", "none")
             .subject("user-2")
             .claim(
                 "urn:zitadel:iam:org:project:roles",
-                mapOf("engineer" to mapOf("project-id" to "zitadel.localhost")),
+                mapOf("copilot" to mapOf("project-id" to "zitadel.localhost")),
             )
             .issuedAt(Instant.now())
             .expiresAt(Instant.now().plusSeconds(3600))
@@ -76,6 +72,7 @@ class MeControllerTest {
         }.andExpect {
             status { isOk() }
             jsonPath("$.features[0]") { value("copilot") }
+            jsonPath("$.userInfo.roles") { doesNotExist() }
         }
     }
 }
