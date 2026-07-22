@@ -24,13 +24,15 @@ Example (board + user_invite):
 
 ### MVP feature catalog
 
-| Wire value | Meaning |
-|------------|---------|
-| `board` | Board |
-| `copilot` | Copilot |
-| `charts` | Charts |
-| `equipment` | Equipment |
-| `user_invite` | Users admin (invite / list) |
+| Wire value | `titleRu` |
+|------------|-----------|
+| `board` | Доска |
+| `copilot` | Наставник |
+| `charts` | Графики |
+| `equipment` | Оборудование |
+| `user_invite` | Пользователи |
+
+`GET /features` (Bearer) returns `{ "items": [ { "id", "titleRu" }, ... ] }` — source of truth for invite UI.
 
 Grant keys in the Zitadel JWT that are not in this catalog are ignored. This service does **not** store passwords or replace the IdP.
 
