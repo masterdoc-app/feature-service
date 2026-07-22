@@ -27,7 +27,7 @@ class FeatureCatalogTest {
             items.map { it.id },
         )
         assertEquals(
-            listOf("Доска", "Графики", "Наставник", "Оборудование", "Пользователи"),
+            listOf("Доска", "ППР", "Наставник", "Оборудование", "Пользователи"),
             items.map { it.titleRu },
         )
     }

@@ -13,7 +13,7 @@ class FeatureCatalog {
         val ENTRIES: List<FeatureDefinition> =
             listOf(
                 FeatureDefinition("board", "Доска"),
-                FeatureDefinition("charts", "Графики"),
+                FeatureDefinition("charts", "ППР"),
                 FeatureDefinition("copilot", "Наставник"),
                 FeatureDefinition("equipment", "Оборудование"),
                 FeatureDefinition("user_invite", "Пользователи"),

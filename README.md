@@ -28,7 +28,7 @@ Example (board + user_invite):
 |------------|-----------|
 | `board` | Доска |
 | `copilot` | Наставник |
-| `charts` | Графики |
+| `charts` | ППР |
 | `equipment` | Оборудование |
 | `user_invite` | Пользователи |
 
