@@ -30,7 +30,7 @@ Example (board + user_invite):
 | `copilot` | Наставник |
 | `charts` | ППР |
 | `equipment` | Оборудование |
-| `user_invite` | Пользователи |
+| `user_invite` | Админ |
 
 `GET /features` (Bearer) returns `{ "items": [ { "id", "titleRu" }, ... ] }` — source of truth for invite UI.
 

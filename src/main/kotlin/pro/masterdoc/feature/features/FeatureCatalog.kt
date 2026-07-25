@@ -16,7 +16,7 @@ class FeatureCatalog {
                 FeatureDefinition("charts", "ППР"),
                 FeatureDefinition("copilot", "Наставник"),
                 FeatureDefinition("equipment", "Оборудование"),
-                FeatureDefinition("user_invite", "Пользователи"),
+                FeatureDefinition("user_invite", "Админ"),
             )
 
         val ALL: Set<String> = ENTRIES.map { it.id }.toSet()

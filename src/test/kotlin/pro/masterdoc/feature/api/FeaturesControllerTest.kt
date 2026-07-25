@@ -43,7 +43,7 @@ class FeaturesControllerTest {
             jsonPath("$.items[0].id") { value("board") }
             jsonPath("$.items[0].titleRu") { value("Доска") }
             jsonPath("$.items[4].id") { value("user_invite") }
-            jsonPath("$.items[4].titleRu") { value("Пользователи") }
+            jsonPath("$.items[4].titleRu") { value("Админ") }
         }
     }
 }
