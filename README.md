@@ -27,6 +27,7 @@ Example (board + admin):
 | Wire value | `titleRu` |
 |------------|-----------|
 | `admin` | Админ |
+| `black_box` | Чёрный ящик |
 | `board` | Доска |
 | `copilot` | Наставник |
 | `charts` | ППР |

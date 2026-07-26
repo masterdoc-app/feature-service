@@ -24,16 +24,22 @@ class FeatureCatalogTest {
     @Test
     fun `catalog returns all features with russian titles`() {
         val items = catalog.catalog()
-        assertEquals(5, items.size)
+        assertEquals(6, items.size)
         assertEquals("admin", items.first().id)
         assertEquals("Админ", items.first().titleRu)
         assertEquals(
-            listOf("admin", "board", "charts", "copilot", "equipment"),
+            listOf("admin", "black_box", "board", "charts", "copilot", "equipment"),
             items.map { it.id },
         )
         assertEquals(
-            listOf("Админ", "Доска", "ППР", "Наставник", "Оборудование"),
+            listOf("Админ", "Чёрный ящик", "Доска", "ППР", "Наставник", "Оборудование"),
             items.map { it.titleRu },
         )
+    }
+
+    @Test
+    fun `includes black_box definition`() {
+        val item = catalog.catalog().single { it.id == "black_box" }
+        assertEquals("Чёрный ящик", item.titleRu)
     }
 }
