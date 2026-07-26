@@ -25,5 +25,9 @@ class FeatureCatalog {
     fun catalog(): List<FeatureDefinition> = ENTRIES.sortedBy { it.id }
 
     fun filter(grantKeys: List<String>): List<String> =
-        grantKeys.filter { it in ALL }.toSortedSet().toList()
+        grantKeys
+            .map { if (it == "user_invite") "admin" else it }
+            .filter { it in ALL }
+            .toSortedSet()
+            .toList()
 }

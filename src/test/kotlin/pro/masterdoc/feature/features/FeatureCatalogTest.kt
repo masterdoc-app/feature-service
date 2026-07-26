@@ -13,7 +13,12 @@ class FeatureCatalogTest {
 
     @Test
     fun `drops unknown keys`() {
-        assertEquals(emptyList<String>(), catalog.filter(listOf("user_invite", "dispatcher")))
+        assertEquals(emptyList<String>(), catalog.filter(listOf("dispatcher", "legacy_admin")))
+    }
+
+    @Test
+    fun `maps legacy user_invite grant to admin`() {
+        assertEquals(listOf("admin", "board"), catalog.filter(listOf("user_invite", "board")))
     }
 
     @Test
