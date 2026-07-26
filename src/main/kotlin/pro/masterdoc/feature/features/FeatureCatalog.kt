@@ -12,11 +12,11 @@ class FeatureCatalog {
     companion object {
         val ENTRIES: List<FeatureDefinition> =
             listOf(
+                FeatureDefinition("admin", "Админ"),
                 FeatureDefinition("board", "Доска"),
                 FeatureDefinition("charts", "ППР"),
                 FeatureDefinition("copilot", "Наставник"),
                 FeatureDefinition("equipment", "Оборудование"),
-                FeatureDefinition("user_invite", "Админ"),
             )
 
         val ALL: Set<String> = ENTRIES.map { it.id }.toSet()

@@ -40,10 +40,10 @@ class FeaturesControllerTest {
         }.andExpect {
             status { isOk() }
             jsonPath("$.items.length()") { value(5) }
-            jsonPath("$.items[0].id") { value("board") }
-            jsonPath("$.items[0].titleRu") { value("Доска") }
-            jsonPath("$.items[4].id") { value("user_invite") }
-            jsonPath("$.items[4].titleRu") { value("Админ") }
+            jsonPath("$.items[0].id") { value("admin") }
+            jsonPath("$.items[0].titleRu") { value("Админ") }
+            jsonPath("$.items[4].id") { value("equipment") }
+            jsonPath("$.items[4].titleRu") { value("Оборудование") }
         }
     }
 }

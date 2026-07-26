@@ -8,7 +8,7 @@ Header: `Authorization: Bearer <Zitadel access_token>`
 
 Returns `userInfo` (id, name, email) plus the enabled `features` from the JWT project grants.
 
-Example (board + user_invite):
+Example (board + admin):
 
 ```json
 {
@@ -18,7 +18,7 @@ Example (board + user_invite):
     "familyName": "Petrov",
     "email": "ivan@example.com"
   },
-  "features": ["board", "user_invite"]
+  "features": ["board", "admin"]
 }
 ```
 
@@ -26,11 +26,11 @@ Example (board + user_invite):
 
 | Wire value | `titleRu` |
 |------------|-----------|
+| `admin` | Админ |
 | `board` | Доска |
 | `copilot` | Наставник |
 | `charts` | ППР |
 | `equipment` | Оборудование |
-| `user_invite` | Админ |
 
 `GET /features` (Bearer) returns `{ "items": [ { "id", "titleRu" }, ... ] }` — source of truth for invite UI.
 

@@ -13,21 +13,21 @@ class FeatureCatalogTest {
 
     @Test
     fun `drops unknown keys`() {
-        assertEquals(emptyList<String>(), catalog.filter(listOf("admin", "dispatcher")))
+        assertEquals(emptyList<String>(), catalog.filter(listOf("user_invite", "dispatcher")))
     }
 
     @Test
     fun `catalog returns all features with russian titles`() {
         val items = catalog.catalog()
         assertEquals(5, items.size)
-        assertEquals("board", items.first().id)
-        assertEquals("Доска", items.first().titleRu)
+        assertEquals("admin", items.first().id)
+        assertEquals("Админ", items.first().titleRu)
         assertEquals(
-            listOf("board", "charts", "copilot", "equipment", "user_invite"),
+            listOf("admin", "board", "charts", "copilot", "equipment"),
             items.map { it.id },
         )
         assertEquals(
-            listOf("Доска", "ППР", "Наставник", "Оборудование", "Админ"),
+            listOf("Админ", "Доска", "ППР", "Наставник", "Оборудование"),
             items.map { it.titleRu },
         )
     }
