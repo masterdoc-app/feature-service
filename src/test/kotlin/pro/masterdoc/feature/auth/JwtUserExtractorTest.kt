@@ -27,10 +27,10 @@ class JwtUserExtractorTest {
     fun `falls back to sorted roles collection claim`() {
         val jwt = jwt(
             subject = "user-1",
-            claims = mapOf("roles" to listOf("copilot", "board")),
+            claims = mapOf("roles" to listOf("charts", "board")),
         )
 
-        assertEquals(listOf("board", "copilot"), extractor.extract(jwt).grantKeys)
+        assertEquals(listOf("board", "charts"), extractor.extract(jwt).grantKeys)
     }
 
     @Test

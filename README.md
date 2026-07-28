@@ -29,20 +29,21 @@ Example (board + admin):
 | `admin` | Админ |
 | `black_box` | Чёрный ящик |
 | `board` | Доска |
-| `copilot` | Наставник |
 | `charts` | ППР |
 | `equipment` | Оборудование |
 
 `GET /features` (Bearer) returns `{ "items": [ { "id", "titleRu" }, ... ] }` — source of truth for invite UI.
 
+`GET /users/{userId}/features` (internal) returns `{ "features": [...] }` for that **target** user via Zitadel Management grants (requires `ZITADEL_MGMT_TOKEN` + `ZITADEL_PROJECT_ID` + header `X-Org-Id`). Not proxied by the public gateway; Compose binds the port to `127.0.0.1` only. Used by dashboard-service for WO assignee eligibility (`equipment`).
+
 Grant keys in the Zitadel JWT that are not in this catalog are ignored. This service does **not** store passwords or replace the IdP.
 
 ## What this service is not
 
-`board` and `copilot` are **feature flags** for client DI only.
+`board` is a **feature flag** for client DI / product ACL (dispatcher board). Engineer work-order access is `equipment`. The former `copilot` / «Наставник» grant is removed — WO assistant is core to engineer work, not a grantable feature.
 
-- Board REST → future **dashboard-service** (`/work-orders`, …)
-- Copilot REST → future **ai-gateway** (`/ai/mentor`, …)
+- Board REST → **dashboard-service** (`/work-orders`, …)
+- Equipment / documents / AI agents → catalog + technologist routes via api-gateway
 
 ## Local run
 
@@ -54,6 +55,7 @@ Env (production / resource-server):
 
 - `ZITADEL_ISSUER` — OIDC issuer
 - `ZITADEL_JWK_SET_URI` — JWKS URL
+- `ZITADEL_MGMT_TOKEN` / `ZITADEL_PROJECT_ID` — optional; enable `GET /users/{id}/features`
 
 Health (no auth): `GET /actuator/health`
 

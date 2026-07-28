@@ -55,7 +55,7 @@ class MeControllerTest {
     }
 
     @Test
-    fun `getMe for copilot grant returns copilot feature`() {
+    fun `getMe drops stale copilot grant from features`() {
         val token = Jwt.withTokenValue("test-token")
             .header("alg", "none")
             .subject("user-2")
@@ -71,7 +71,7 @@ class MeControllerTest {
             with(jwt().jwt(token))
         }.andExpect {
             status { isOk() }
-            jsonPath("$.features[0]") { value("copilot") }
+            jsonPath("$.features") { isEmpty() }
             jsonPath("$.userInfo.roles") { doesNotExist() }
         }
     }

@@ -54,6 +54,8 @@ class SecurityConfig(
             authorizeHttpRequests {
                 authorize("/actuator/health", permitAll)
                 authorize("/actuator/health/**", permitAll)
+                // Internal dashboard→feature lookup (not via public gateway). Bind compose to 127.0.0.1.
+                authorize("/users/*/features", permitAll)
                 authorize(anyRequest, authenticated)
             }
             exceptionHandling {
