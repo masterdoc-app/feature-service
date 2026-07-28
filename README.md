@@ -29,7 +29,6 @@ Example (board + admin):
 | `admin` | Админ |
 | `black_box` | Чёрный ящик |
 | `board` | Доска |
-| `copilot` | Наставник |
 | `charts` | ППР |
 | `equipment` | Оборудование |
 
@@ -39,10 +38,10 @@ Grant keys in the Zitadel JWT that are not in this catalog are ignored. This ser
 
 ## What this service is not
 
-`board` and `copilot` are **feature flags** for client DI only.
+`board` is a **feature flag** for client DI / product ACL (dispatcher board). Engineer work-order access is `equipment`. The former `copilot` / «Наставник» grant is removed — WO assistant is core to engineer work, not a grantable feature.
 
-- Board REST → future **dashboard-service** (`/work-orders`, …)
-- Copilot REST → future **ai-gateway** (`/ai/mentor`, …)
+- Board REST → **dashboard-service** (`/work-orders`, …)
+- Equipment / documents / AI agents → catalog + technologist routes via api-gateway
 
 ## Local run
 

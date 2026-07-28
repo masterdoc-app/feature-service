@@ -16,7 +16,6 @@ class FeatureCatalog {
                 FeatureDefinition("black_box", "Чёрный ящик"),
                 FeatureDefinition("board", "Доска"),
                 FeatureDefinition("charts", "ППР"),
-                FeatureDefinition("copilot", "Наставник"),
                 FeatureDefinition("equipment", "Оборудование"),
             )
 
