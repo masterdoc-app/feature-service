@@ -54,6 +54,8 @@ class SecurityConfig(
             authorizeHttpRequests {
                 authorize("/actuator/health", permitAll)
                 authorize("/actuator/health/**", permitAll)
+                // Internal service-to-service (dashboard assignee eligibility).
+                authorize("/users/*/features", permitAll)
                 authorize(anyRequest, authenticated)
             }
             exceptionHandling {

@@ -34,6 +34,8 @@ Example (board + admin):
 
 `GET /features` (Bearer) returns `{ "items": [ { "id", "titleRu" }, ... ] }` — source of truth for invite UI.
 
+`GET /users/{userId}/features` (internal, header `X-Org-Id`) returns `{ "features": [...] }` for that **target** user via Zitadel Management grants (requires `ZITADEL_MGMT_TOKEN` + `ZITADEL_PROJECT_ID`). Used by dashboard-service for WO assignee eligibility (`equipment`).
+
 Grant keys in the Zitadel JWT that are not in this catalog are ignored. This service does **not** store passwords or replace the IdP.
 
 ## What this service is not
@@ -53,6 +55,7 @@ Env (production / resource-server):
 
 - `ZITADEL_ISSUER` — OIDC issuer
 - `ZITADEL_JWK_SET_URI` — JWKS URL
+- `ZITADEL_MGMT_TOKEN` / `ZITADEL_PROJECT_ID` — optional; enable `GET /users/{id}/features`
 
 Health (no auth): `GET /actuator/health`
 
