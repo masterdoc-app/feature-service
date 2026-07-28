@@ -10,7 +10,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import pro.masterdoc.feature.config.InternalServiceTokenFilter
 import pro.masterdoc.feature.grants.UserGrantsLookup
 
 @SpringBootTest
@@ -20,7 +19,6 @@ import pro.masterdoc.feature.grants.UserGrantsLookup
         "spring.security.oauth2.resourceserver.jwt.issuer-uri=",
         "spring.security.oauth2.resourceserver.jwt.jwk-set-uri=",
         "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration",
-        "internal.service-token=test-internal-token",
     ],
 )
 class UserFeaturesControllerTest {
@@ -32,32 +30,12 @@ class UserFeaturesControllerTest {
     private lateinit var userGrantsLookup: UserGrantsLookup
 
     @Test
-    fun `getUserFeatures rejects without internal token`() {
-        mockMvc.get("/users/engineer-1/features") {
-            header("X-Org-Id", "org-1")
-        }.andExpect {
-            status { isUnauthorized() }
-        }
-    }
-
-    @Test
-    fun `getUserFeatures rejects wrong internal token`() {
-        mockMvc.get("/users/engineer-1/features") {
-            header("X-Org-Id", "org-1")
-            header(InternalServiceTokenFilter.HEADER, "wrong")
-        }.andExpect {
-            status { isUnauthorized() }
-        }
-    }
-
-    @Test
     fun `getUserFeatures returns catalog-filtered grants for target user`() {
         `when`(userGrantsLookup.grantKeys("org-1", "engineer-1"))
             .thenReturn(listOf("equipment", "board", "copilot"))
 
         mockMvc.get("/users/engineer-1/features") {
             header("X-Org-Id", "org-1")
-            header(InternalServiceTokenFilter.HEADER, "test-internal-token")
         }.andExpect {
             status { isOk() }
             jsonPath("$.features[0]") { value("board") }
@@ -68,9 +46,7 @@ class UserFeaturesControllerTest {
 
     @Test
     fun `getUserFeatures requires org header`() {
-        mockMvc.get("/users/engineer-1/features") {
-            header(InternalServiceTokenFilter.HEADER, "test-internal-token")
-        }.andExpect {
+        mockMvc.get("/users/engineer-1/features").andExpect {
             status { isBadRequest() }
         }
     }
@@ -81,7 +57,6 @@ class UserFeaturesControllerTest {
 
         mockMvc.get("/users/dispatcher-1/features") {
             header("X-Org-Id", "org-1")
-            header(InternalServiceTokenFilter.HEADER, "test-internal-token")
         }.andExpect {
             status { isOk() }
             jsonPath("$.features[0]") { value("board") }

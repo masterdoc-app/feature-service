@@ -34,7 +34,7 @@ Example (board + admin):
 
 `GET /features` (Bearer) returns `{ "items": [ { "id", "titleRu" }, ... ] }` — source of truth for invite UI.
 
-`GET /users/{userId}/features` (internal) returns `{ "features": [...] }` for that **target** user via Zitadel Management grants (requires `ZITADEL_MGMT_TOKEN` + `ZITADEL_PROJECT_ID`). Requires headers `X-Org-Id` and `X-Internal-Token` matching `INTERNAL_SERVICE_TOKEN` (fail-closed if unset). Used by dashboard-service for WO assignee eligibility (`equipment`).
+`GET /users/{userId}/features` (internal) returns `{ "features": [...] }` for that **target** user via Zitadel Management grants (requires `ZITADEL_MGMT_TOKEN` + `ZITADEL_PROJECT_ID` + header `X-Org-Id`). Not proxied by the public gateway; Compose binds the port to `127.0.0.1` only. Used by dashboard-service for WO assignee eligibility (`equipment`).
 
 Grant keys in the Zitadel JWT that are not in this catalog are ignored. This service does **not** store passwords or replace the IdP.
 
@@ -56,7 +56,6 @@ Env (production / resource-server):
 - `ZITADEL_ISSUER` — OIDC issuer
 - `ZITADEL_JWK_SET_URI` — JWKS URL
 - `ZITADEL_MGMT_TOKEN` / `ZITADEL_PROJECT_ID` — optional; enable `GET /users/{id}/features`
-- `INTERNAL_SERVICE_TOKEN` — required for `GET /users/{id}/features`; clients send `X-Internal-Token` (same pattern as black-box)
 
 Health (no auth): `GET /actuator/health`
 

@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoders
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 class SecurityConfig(
@@ -22,8 +21,6 @@ class SecurityConfig(
     private val issuerUri: String,
     @Value("\${spring.security.oauth2.resourceserver.jwt.jwk-set-uri:}")
     private val jwkSetUri: String,
-    @Value("\${internal.service-token:}")
-    private val internalServiceToken: String,
 ) {
     private val log = LoggerFactory.getLogger(SecurityConfig::class.java)
 
@@ -32,14 +29,12 @@ class SecurityConfig(
         val issuerSet = issuerUri.isNotBlank()
         val jwkSetUriSet = jwkSetUri.isNotBlank()
         val jwtConfigured = issuerSet || jwkSetUriSet
-        val internalTokenConfigured = internalServiceToken.isNotBlank()
 
         log.info(
-            "event=startup jwtConfigured={} issuerSet={} jwkSetUriSet={} internalTokenConfigured={}",
+            "event=startup jwtConfigured={} issuerSet={} jwkSetUriSet={}",
             jwtConfigured,
             issuerSet,
             jwkSetUriSet,
-            internalTokenConfigured,
         )
 
         val authFailedEntryPoint = AuthenticationEntryPoint { request, response, authException ->
@@ -59,7 +54,7 @@ class SecurityConfig(
             authorizeHttpRequests {
                 authorize("/actuator/health", permitAll)
                 authorize("/actuator/health/**", permitAll)
-                // JWT not required; [InternalServiceTokenFilter] enforces shared secret (fail-closed).
+                // Internal dashboard→feature lookup (not via public gateway). Bind compose to 127.0.0.1.
                 authorize("/users/*/features", permitAll)
                 authorize(anyRequest, authenticated)
             }
@@ -73,10 +68,6 @@ class SecurityConfig(
                 }
             }
         }
-        http.addFilterBefore(
-            InternalServiceTokenFilter(internalServiceToken),
-            UsernamePasswordAuthenticationFilter::class.java,
-        )
         return http.build()
     }
 

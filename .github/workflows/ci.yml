@@ -67,16 +67,13 @@ jobs:
           ZITADEL_JWK_SET_URI: ${{ secrets.ZITADEL_JWK_SET_URI }}
           ZITADEL_MGMT_TOKEN: ${{ secrets.ZITADEL_MGMT_TOKEN }}
           ZITADEL_PROJECT_ID: ${{ secrets.ZITADEL_PROJECT_ID }}
-          INTERNAL_SERVICE_TOKEN: ${{ secrets.INTERNAL_SERVICE_TOKEN }}
         run: |
-          test -n "$INTERNAL_SERVICE_TOKEN" || { echo "Add secret INTERNAL_SERVICE_TOKEN"; exit 1; }
           cat > runtime.env <<EOF
           FEATURE_SERVICE_PORT=8082
           ZITADEL_ISSUER=${ZITADEL_ISSUER}
           ZITADEL_JWK_SET_URI=${ZITADEL_JWK_SET_URI}
           ZITADEL_MGMT_TOKEN=${ZITADEL_MGMT_TOKEN:-}
           ZITADEL_PROJECT_ID=${ZITADEL_PROJECT_ID:-}
-          INTERNAL_SERVICE_TOKEN=${INTERNAL_SERVICE_TOKEN}
           EOF
           chmod 600 runtime.env
 
