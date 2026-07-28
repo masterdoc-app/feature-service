@@ -18,6 +18,7 @@ services:
       ZITADEL_ISSUER: ${ZITADEL_ISSUER:-}
       ZITADEL_MGMT_TOKEN: ${ZITADEL_MGMT_TOKEN:-}
       ZITADEL_PROJECT_ID: ${ZITADEL_PROJECT_ID:-}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8082/actuator/health"]
       interval: 10s
