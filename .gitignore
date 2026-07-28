@@ -13,3 +13,4 @@ runtime.env
 
 # IDE / accidental compile output
 bin/
+.kotlin/
