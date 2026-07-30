@@ -18,6 +18,7 @@ class FeatureCatalog {
                 FeatureDefinition("charts", "ППР"),
                 FeatureDefinition("engineer", "Инженер"),
                 FeatureDefinition("equipment", "Оборудование"),
+                FeatureDefinition("map", "Карта"),
                 FeatureDefinition("tickets", "Заявки"),
             )
 
