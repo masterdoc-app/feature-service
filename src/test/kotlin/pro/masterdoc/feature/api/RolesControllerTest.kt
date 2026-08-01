@@ -83,7 +83,20 @@ class RolesControllerTest {
             status { isOk() }
             jsonPath("$.id") { value("manager") }
             jsonPath("$.titleRu") { value("Руководитель") }
-            jsonPath("$.features[1]") { value("charts") }
+            jsonPath("$.features[0]") { value("charts") }
+            jsonPath("$.features[1]") { value("reports") }
+        }
+    }
+
+    @Test
+    fun `PUT admin role without admin feature returns 400`() {
+        mockMvc.put("/roles/admin") {
+            with(jwtRequest())
+            header("X-Org-Id", "admin-guard-org")
+            contentType = org.springframework.http.MediaType.APPLICATION_JSON
+            content = """{"features":["equipment","black_box"]}"""
+        }.andExpect {
+            status { isBadRequest() }
         }
     }
 }

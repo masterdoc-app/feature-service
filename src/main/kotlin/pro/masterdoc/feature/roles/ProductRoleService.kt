@@ -41,10 +41,16 @@ class ProductRoleService(
         if (unknown != null) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown feature: $unknown")
         }
+        if (roleId == "admin" && "admin" !in features) {
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "admin role must include feature admin",
+            )
+        }
 
         val current = listWithSeed(orgId).firstOrNull { it.roleId == roleId }
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown role: $roleId")
-        val updated = current.copy(titleRu = titleRu ?: current.titleRu, features = features)
+        val updated = current.copy(titleRu = titleRu ?: current.titleRu, features = features.distinct().sorted())
         repository.update(orgId, updated)
         return updated
     }
