@@ -39,7 +39,7 @@ class FeaturesControllerTest {
             with(jwt().jwt(token))
         }.andExpect {
             status { isOk() }
-            jsonPath("$.items.length()") { value(9) }
+            jsonPath("$.items.length()") { value(10) }
             jsonPath("$.items[0].id") { value("admin") }
             jsonPath("$.items[0].titleRu") { value("Админ") }
             jsonPath("$.items[1].id") { value("ai") }
@@ -52,8 +52,10 @@ class FeaturesControllerTest {
             jsonPath("$.items[6].titleRu") { value("Оборудование") }
             jsonPath("$.items[7].id") { value("map") }
             jsonPath("$.items[7].titleRu") { value("Карта") }
-            jsonPath("$.items[8].id") { value("tickets") }
-            jsonPath("$.items[8].titleRu") { value("Заявки") }
+            jsonPath("$.items[8].id") { value("reports") }
+            jsonPath("$.items[8].titleRu") { value("Отчёты") }
+            jsonPath("$.items[9].id") { value("tickets") }
+            jsonPath("$.items[9].titleRu") { value("Заявки") }
         }
     }
 }

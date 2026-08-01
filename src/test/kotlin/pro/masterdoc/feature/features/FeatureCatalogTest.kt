@@ -24,15 +24,15 @@ class FeatureCatalogTest {
     @Test
     fun `catalog returns all features with russian titles`() {
         val items = catalog.catalog()
-        assertEquals(9, items.size)
+        assertEquals(10, items.size)
         assertEquals("admin", items.first().id)
         assertEquals("Админ", items.first().titleRu)
         assertEquals(
-            listOf("admin", "ai", "black_box", "board", "charts", "engineer", "equipment", "map", "tickets"),
+            listOf("admin", "ai", "black_box", "board", "charts", "engineer", "equipment", "map", "reports", "tickets"),
             items.map { it.id },
         )
         assertEquals(
-            listOf("Админ", "ИИ", "Чёрный ящик", "Доска", "ППР", "Инженер", "Оборудование", "Карта", "Заявки"),
+            listOf("Админ", "ИИ", "Чёрный ящик", "Доска", "ППР", "Инженер", "Оборудование", "Карта", "Отчёты", "Заявки"),
             items.map { it.titleRu },
         )
     }
