@@ -1,10 +1,28 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-features}"
+      POSTGRES_USER: "${POSTGRES_USER:-features}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-features}"
+    volumes:
+      - feature_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-features} -d ${POSTGRES_DB:-features}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
   feature-service:
     build:
       context: ..
       dockerfile: Dockerfile
     image: masterdoc-feature-service:latest
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     # Bind localhost only — not on the public interface (dashboard uses host.docker.internal).
     ports:
       - "127.0.0.1:${FEATURE_SERVICE_PORT:-8082}:8082"
@@ -14,6 +32,9 @@ services:
       - "auth.fixaverse.ru:host-gateway"
     environment:
       SERVER_PORT: "8082"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/${POSTGRES_DB:-features}"
+      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-features}"
+      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-features}"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${ZITADEL_ISSUER:-}
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: ${ZITADEL_JWK_SET_URI:-}
       ZITADEL_ISSUER: ${ZITADEL_ISSUER:-}
@@ -25,3 +46,6 @@ services:
       timeout: 5s
       retries: 6
       start_period: 40s
+
+volumes:
+  feature_pg:
