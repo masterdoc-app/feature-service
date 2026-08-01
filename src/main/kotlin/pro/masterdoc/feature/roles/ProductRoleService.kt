@@ -27,6 +27,12 @@ class ProductRoleService(
         requireOrgId(orgId)
         if (repository.count(orgId) == 0) {
             repository.insertAll(orgId, DEFAULTS)
+        } else {
+            val existingIds = repository.list(orgId).map { it.roleId }.toSet()
+            val missing = DEFAULTS.filter { it.roleId !in existingIds }
+            if (missing.isNotEmpty()) {
+                repository.insertAll(orgId, missing)
+            }
         }
         return repository.list(orgId)
     }

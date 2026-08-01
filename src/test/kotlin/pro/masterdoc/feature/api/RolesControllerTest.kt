@@ -25,6 +25,9 @@ class RolesControllerTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
+    @Autowired
+    private lateinit var jdbcTemplate: org.springframework.jdbc.core.JdbcTemplate
+
     private fun jwtRequest() =
         jwt().jwt(
             Jwt.withTokenValue("test-token")
@@ -49,6 +52,68 @@ class RolesControllerTest {
             jsonPath("$.items[4].titleRu") { value("Заявитель") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
             jsonPath("$.items[4].features.length()") { value(1) }
+        }
+    }
+
+    @Test
+    fun `existing org without requester gets backfilled on GET`() {
+        val orgId = "backfill-org"
+        jdbcTemplate.update(
+            "INSERT INTO product_roles (org_id, role_id, title_ru, features) VALUES (?, ?, ?, ?)",
+            orgId,
+            "admin",
+            "Админ",
+            """["admin","black_box","equipment"]""",
+        )
+        jdbcTemplate.update(
+            "INSERT INTO product_roles (org_id, role_id, title_ru, features) VALUES (?, ?, ?, ?)",
+            orgId,
+            "dispatcher",
+            "Диспетчер",
+            """["map","board","ai","charts"]""",
+        )
+        jdbcTemplate.update(
+            "INSERT INTO product_roles (org_id, role_id, title_ru, features) VALUES (?, ?, ?, ?)",
+            orgId,
+            "engineer",
+            "Инженер",
+            """["engineer"]""",
+        )
+        jdbcTemplate.update(
+            "INSERT INTO product_roles (org_id, role_id, title_ru, features) VALUES (?, ?, ?, ?)",
+            orgId,
+            "manager",
+            "Менеджер",
+            """["reports"]""",
+        )
+
+        mockMvc.get("/roles") {
+            with(jwtRequest())
+            header("X-Org-Id", orgId)
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.items.length()") { value(5) }
+            jsonPath("$.items[4].id") { value("requester") }
+            jsonPath("$.items[4].features[0]") { value("tickets") }
+            jsonPath("$.items[3].id") { value("manager") }
+            jsonPath("$.items[3].features[0]") { value("reports") }
+            jsonPath("$.items[3].features.length()") { value(1) }
+        }
+    }
+
+    @Test
+    fun `PUT requester updates features`() {
+        mockMvc.put("/roles/requester") {
+            with(jwtRequest())
+            header("X-Org-Id", "requester-update-org")
+            contentType = org.springframework.http.MediaType.APPLICATION_JSON
+            content = """{"features":["tickets","map"]}"""
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.id") { value("requester") }
+            jsonPath("$.titleRu") { value("Заявитель") }
+            jsonPath("$.features[0]") { value("map") }
+            jsonPath("$.features[1]") { value("tickets") }
         }
     }
 
