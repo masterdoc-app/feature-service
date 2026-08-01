@@ -11,13 +11,14 @@ class ProductRoleService(
     private val repository: ProductRoleRepository,
 ) {
     companion object {
-        private val ROLE_IDS = setOf("admin", "dispatcher", "engineer", "manager")
+        private val ROLE_IDS = setOf("admin", "dispatcher", "engineer", "manager", "requester")
         private val DEFAULTS =
             listOf(
                 ProductRole("admin", "Админ", listOf("admin", "black_box", "equipment")),
                 ProductRole("dispatcher", "Диспетчер", listOf("map", "board", "ai", "charts")),
                 ProductRole("engineer", "Инженер", listOf("engineer")),
                 ProductRole("manager", "Менеджер", listOf("reports")),
+                ProductRole("requester", "Заявитель", listOf("tickets")),
             )
     }
 

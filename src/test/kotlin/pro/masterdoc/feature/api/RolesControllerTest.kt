@@ -36,15 +36,19 @@ class RolesControllerTest {
         )
 
     @Test
-    fun `empty org GET seeds four roles`() {
+    fun `empty org GET seeds five roles including requester`() {
         mockMvc.get("/roles") {
             with(jwtRequest())
             header("X-Org-Id", "seed-org")
         }.andExpect {
             status { isOk() }
-            jsonPath("$.items.length()") { value(4) }
+            jsonPath("$.items.length()") { value(5) }
             jsonPath("$.items[0].id") { value("admin") }
             jsonPath("$.items[0].features[0]") { value("admin") }
+            jsonPath("$.items[4].id") { value("requester") }
+            jsonPath("$.items[4].titleRu") { value("Заявитель") }
+            jsonPath("$.items[4].features[0]") { value("tickets") }
+            jsonPath("$.items[4].features.length()") { value(1) }
         }
     }
 
