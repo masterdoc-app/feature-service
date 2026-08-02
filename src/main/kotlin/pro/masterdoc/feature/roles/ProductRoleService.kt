@@ -14,7 +14,7 @@ class ProductRoleService(
         private val ROLE_IDS = setOf("admin", "dispatcher", "engineer", "manager", "requester")
         private val DEFAULTS =
             listOf(
-                ProductRole("admin", "Админ", listOf("admin", "black_box", "equipment")),
+                ProductRole("admin", "Админ", listOf("admin", "black_box", "equipment", "asset_qr")),
                 ProductRole("dispatcher", "Диспетчер", listOf("map", "board", "ai", "charts")),
                 ProductRole("engineer", "Инженер", listOf("engineer")),
                 ProductRole("manager", "Менеджер", listOf("reports")),
@@ -34,7 +34,16 @@ class ProductRoleService(
                 repository.insertAll(orgId, missing)
             }
         }
-        return repository.list(orgId)
+        val roles = repository.list(orgId)
+        val admin = roles.firstOrNull { it.roleId == "admin" }
+        if (admin != null && "asset_qr" !in admin.features) {
+            repository.update(
+                orgId,
+                admin.copy(features = (admin.features + "asset_qr").distinct().sorted()),
+            )
+            return repository.list(orgId)
+        }
+        return roles
     }
 
     @Transactional

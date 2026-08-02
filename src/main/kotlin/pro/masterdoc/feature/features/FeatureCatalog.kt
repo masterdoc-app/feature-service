@@ -14,6 +14,7 @@ class FeatureCatalog {
             listOf(
                 FeatureDefinition("admin", "Админ"),
                 FeatureDefinition("ai", "ИИ"),
+                FeatureDefinition("asset_qr", "QR оборудования"),
                 FeatureDefinition("black_box", "Чёрный ящик"),
                 FeatureDefinition("board", "Доска"),
                 FeatureDefinition("charts", "ППР"),

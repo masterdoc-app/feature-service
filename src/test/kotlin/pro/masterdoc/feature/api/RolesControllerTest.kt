@@ -48,6 +48,7 @@ class RolesControllerTest {
             jsonPath("$.items.length()") { value(5) }
             jsonPath("$.items[0].id") { value("admin") }
             jsonPath("$.items[0].features[0]") { value("admin") }
+            jsonPath("$.items[0].features[3]") { value("asset_qr") }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].titleRu") { value("Заявитель") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
@@ -93,11 +94,39 @@ class RolesControllerTest {
         }.andExpect {
             status { isOk() }
             jsonPath("$.items.length()") { value(5) }
+            jsonPath("$.items[0].id") { value("admin") }
+            jsonPath("$.items[0].features[1]") { value("asset_qr") }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
             jsonPath("$.items[3].id") { value("manager") }
             jsonPath("$.items[3].features[0]") { value("reports") }
             jsonPath("$.items[3].features.length()") { value(1) }
+        }
+    }
+
+    @Test
+    fun `existing customized admin keeps extra features when asset QR is backfilled`() {
+        val orgId = "admin-asset-qr-backfill-org"
+        jdbcTemplate.update(
+            "INSERT INTO product_roles (org_id, role_id, title_ru, features) VALUES (?, ?, ?, ?)",
+            orgId,
+            "admin",
+            "Старший админ",
+            """["admin","equipment","map"]""",
+        )
+
+        mockMvc.get("/roles") {
+            with(jwtRequest())
+            header("X-Org-Id", orgId)
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.items[0].id") { value("admin") }
+            jsonPath("$.items[0].titleRu") { value("Старший админ") }
+            jsonPath("$.items[0].features[0]") { value("admin") }
+            jsonPath("$.items[0].features[1]") { value("asset_qr") }
+            jsonPath("$.items[0].features[2]") { value("equipment") }
+            jsonPath("$.items[0].features[3]") { value("map") }
+            jsonPath("$.items[0].features.length()") { value(4) }
         }
     }
 
