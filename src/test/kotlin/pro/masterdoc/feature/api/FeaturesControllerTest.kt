@@ -39,23 +39,25 @@ class FeaturesControllerTest {
             with(jwt().jwt(token))
         }.andExpect {
             status { isOk() }
-            jsonPath("$.items.length()") { value(10) }
+            jsonPath("$.items.length()") { value(11) }
             jsonPath("$.items[0].id") { value("admin") }
             jsonPath("$.items[0].titleRu") { value("Админ") }
             jsonPath("$.items[1].id") { value("ai") }
             jsonPath("$.items[1].titleRu") { value("ИИ") }
-            jsonPath("$.items[2].id") { value("black_box") }
-            jsonPath("$.items[2].titleRu") { value("Чёрный ящик") }
-            jsonPath("$.items[5].id") { value("engineer") }
-            jsonPath("$.items[5].titleRu") { value("Инженер") }
-            jsonPath("$.items[6].id") { value("equipment") }
-            jsonPath("$.items[6].titleRu") { value("Оборудование") }
-            jsonPath("$.items[7].id") { value("map") }
-            jsonPath("$.items[7].titleRu") { value("Карта") }
-            jsonPath("$.items[8].id") { value("reports") }
-            jsonPath("$.items[8].titleRu") { value("Отчёты") }
-            jsonPath("$.items[9].id") { value("tickets") }
-            jsonPath("$.items[9].titleRu") { value("Заявки") }
+            jsonPath("$.items[2].id") { value("asset_qr") }
+            jsonPath("$.items[2].titleRu") { value("QR оборудования") }
+            jsonPath("$.items[3].id") { value("black_box") }
+            jsonPath("$.items[3].titleRu") { value("Чёрный ящик") }
+            jsonPath("$.items[6].id") { value("engineer") }
+            jsonPath("$.items[6].titleRu") { value("Инженер") }
+            jsonPath("$.items[7].id") { value("equipment") }
+            jsonPath("$.items[7].titleRu") { value("Оборудование") }
+            jsonPath("$.items[8].id") { value("map") }
+            jsonPath("$.items[8].titleRu") { value("Карта") }
+            jsonPath("$.items[9].id") { value("reports") }
+            jsonPath("$.items[9].titleRu") { value("Отчёты") }
+            jsonPath("$.items[10].id") { value("tickets") }
+            jsonPath("$.items[10].titleRu") { value("Заявки") }
         }
     }
 }
