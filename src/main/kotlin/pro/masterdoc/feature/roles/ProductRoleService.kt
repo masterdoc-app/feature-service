@@ -16,7 +16,7 @@ class ProductRoleService(
             listOf(
                 ProductRole("admin", "Админ", listOf("admin", "black_box", "equipment")),
                 ProductRole("dispatcher", "Диспетчер", listOf("map", "board", "ai", "charts", "equipment")),
-                ProductRole("engineer", "Инженер", listOf("engineer")),
+                ProductRole("engineer", "Инженер", listOf("engineer", "tickets")),
                 ProductRole("manager", "Менеджер", listOf("reports")),
                 ProductRole("requester", "Заявитель", listOf("tickets")),
             )
@@ -39,6 +39,14 @@ class ProductRoleService(
                 repository.update(
                     orgId,
                     dispatcher.copy(features = (dispatcher.features + "equipment").distinct().sorted()),
+                )
+            }
+            // Additive: engineer = Мои заявки + Заявки.
+            val engineer = repository.list(orgId).firstOrNull { it.roleId == "engineer" }
+            if (engineer != null && "tickets" !in engineer.features) {
+                repository.update(
+                    orgId,
+                    engineer.copy(features = (engineer.features + "tickets").distinct().sorted()),
                 )
             }
         }

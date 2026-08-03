@@ -52,6 +52,11 @@ class RolesControllerTest {
             jsonPath("$.items[1].id") { value("dispatcher") }
             jsonPath("$.items[1].features") { value(org.hamcrest.Matchers.hasItem("equipment")) }
             jsonPath("$.items[1].features.length()") { value(5) }
+            jsonPath("$.items[2].id") { value("engineer") }
+            jsonPath("$.items[2].titleRu") { value("Инженер") }
+            jsonPath("$.items[2].features[0]") { value("engineer") }
+            jsonPath("$.items[2].features[1]") { value("tickets") }
+            jsonPath("$.items[2].features.length()") { value(2) }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].titleRu") { value("Заявитель") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
@@ -103,6 +108,9 @@ class RolesControllerTest {
             jsonPath("$.items[1].id") { value("dispatcher") }
             jsonPath("$.items[1].features") { value(org.hamcrest.Matchers.hasItem("equipment")) }
             jsonPath("$.items[1].features.length()") { value(5) }
+            jsonPath("$.items[2].id") { value("engineer") }
+            jsonPath("$.items[2].features") { value(org.hamcrest.Matchers.hasItem("tickets")) }
+            jsonPath("$.items[2].features.length()") { value(2) }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
             jsonPath("$.items[3].id") { value("manager") }
