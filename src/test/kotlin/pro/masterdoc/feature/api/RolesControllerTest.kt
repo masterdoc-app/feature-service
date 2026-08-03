@@ -48,7 +48,10 @@ class RolesControllerTest {
             jsonPath("$.items.length()") { value(5) }
             jsonPath("$.items[0].id") { value("admin") }
             jsonPath("$.items[0].features[0]") { value("admin") }
-            jsonPath("$.items[0].features[3]") { value("asset_qr") }
+            jsonPath("$.items[0].features.length()") { value(3) }
+            jsonPath("$.items[1].id") { value("dispatcher") }
+            jsonPath("$.items[1].features[4]") { value("equipment") }
+            jsonPath("$.items[1].features.length()") { value(5) }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].titleRu") { value("Заявитель") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
@@ -95,7 +98,8 @@ class RolesControllerTest {
             status { isOk() }
             jsonPath("$.items.length()") { value(5) }
             jsonPath("$.items[0].id") { value("admin") }
-            jsonPath("$.items[0].features[1]") { value("asset_qr") }
+            jsonPath("$.items[0].features[1]") { value("black_box") }
+            jsonPath("$.items[0].features.length()") { value(3) }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
             jsonPath("$.items[3].id") { value("manager") }
@@ -105,8 +109,8 @@ class RolesControllerTest {
     }
 
     @Test
-    fun `existing customized admin keeps extra features when asset QR is backfilled`() {
-        val orgId = "admin-asset-qr-backfill-org"
+    fun `existing customized admin is not modified`() {
+        val orgId = "custom-admin-org"
         jdbcTemplate.update(
             "INSERT INTO product_roles (org_id, role_id, title_ru, features) VALUES (?, ?, ?, ?)",
             orgId,
@@ -123,10 +127,9 @@ class RolesControllerTest {
             jsonPath("$.items[0].id") { value("admin") }
             jsonPath("$.items[0].titleRu") { value("Старший админ") }
             jsonPath("$.items[0].features[0]") { value("admin") }
-            jsonPath("$.items[0].features[1]") { value("asset_qr") }
-            jsonPath("$.items[0].features[2]") { value("equipment") }
-            jsonPath("$.items[0].features[3]") { value("map") }
-            jsonPath("$.items[0].features.length()") { value(4) }
+            jsonPath("$.items[0].features[1]") { value("equipment") }
+            jsonPath("$.items[0].features[2]") { value("map") }
+            jsonPath("$.items[0].features.length()") { value(3) }
         }
     }
 

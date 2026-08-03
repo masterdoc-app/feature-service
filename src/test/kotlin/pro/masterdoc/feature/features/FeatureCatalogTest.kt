@@ -24,15 +24,15 @@ class FeatureCatalogTest {
     @Test
     fun `catalog returns all features with russian titles`() {
         val items = catalog.catalog()
-        assertEquals(11, items.size)
+        assertEquals(10, items.size)
         assertEquals("admin", items.first().id)
         assertEquals("Админ", items.first().titleRu)
         assertEquals(
-            listOf("admin", "ai", "asset_qr", "black_box", "board", "charts", "engineer", "equipment", "map", "reports", "tickets"),
+            listOf("admin", "ai", "black_box", "board", "charts", "engineer", "equipment", "map", "reports", "tickets"),
             items.map { it.id },
         )
         assertEquals(
-            listOf("Админ", "ИИ", "QR оборудования", "Чёрный ящик", "Доска", "ППР", "Инженер", "Оборудование", "Карта", "Отчёты", "Заявки"),
+            listOf("Админ", "ИИ", "Чёрный ящик", "Доска", "ППР", "Инженер", "Оборудование", "Карта", "Отчёты", "Заявки"),
             items.map { it.titleRu },
         )
     }
@@ -55,8 +55,7 @@ class FeatureCatalogTest {
     }
 
     @Test
-    fun `includes asset QR definition`() {
-        val item = catalog.catalog().single { it.id == "asset_qr" }
-        assertEquals("QR оборудования", item.titleRu)
+    fun `drops removed asset QR grant`() {
+        assertEquals(listOf("equipment"), catalog.filter(listOf("asset_qr", "equipment")))
     }
 }
