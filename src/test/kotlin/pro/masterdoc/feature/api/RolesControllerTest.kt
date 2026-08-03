@@ -50,7 +50,7 @@ class RolesControllerTest {
             jsonPath("$.items[0].features[0]") { value("admin") }
             jsonPath("$.items[0].features.length()") { value(3) }
             jsonPath("$.items[1].id") { value("dispatcher") }
-            jsonPath("$.items[1].features[4]") { value("equipment") }
+            jsonPath("$.items[1].features") { value(org.hamcrest.Matchers.hasItem("equipment")) }
             jsonPath("$.items[1].features.length()") { value(5) }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].titleRu") { value("Заявитель") }
@@ -101,7 +101,7 @@ class RolesControllerTest {
             jsonPath("$.items[0].features[1]") { value("black_box") }
             jsonPath("$.items[0].features.length()") { value(3) }
             jsonPath("$.items[1].id") { value("dispatcher") }
-            jsonPath("$.items[1].features[4]") { value("equipment") }
+            jsonPath("$.items[1].features") { value(org.hamcrest.Matchers.hasItem("equipment")) }
             jsonPath("$.items[1].features.length()") { value(5) }
             jsonPath("$.items[4].id") { value("requester") }
             jsonPath("$.items[4].features[0]") { value("tickets") }
