@@ -33,6 +33,14 @@ class ProductRoleService(
             if (missing.isNotEmpty()) {
                 repository.insertAll(orgId, missing)
             }
+            // Additive: existing dispatcher rows get equipment for QR print access.
+            val dispatcher = repository.list(orgId).firstOrNull { it.roleId == "dispatcher" }
+            if (dispatcher != null && "equipment" !in dispatcher.features) {
+                repository.update(
+                    orgId,
+                    dispatcher.copy(features = (dispatcher.features + "equipment").distinct().sorted()),
+                )
+            }
         }
         return repository.list(orgId)
     }
