@@ -1,6 +1,7 @@
 package pro.masterdoc.feature.auth
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.springframework.security.oauth2.jwt.Jwt
 import java.time.Instant
@@ -65,6 +66,35 @@ class JwtUserExtractorTest {
         assertEquals("Ivan", claims.givenName)
         assertEquals("Petrov", claims.familyName)
         assertEquals("ivan@example.com", claims.email)
+    }
+
+    @Test
+    fun `maps org name from resource owner claim trimmed`() {
+        val jwt = jwt(
+            subject = "user-1",
+            claims = mapOf(
+                JwtUserExtractor.ORG_NAME_CLAIM to "  Fixaverse Demo  ",
+            ),
+        )
+
+        assertEquals("Fixaverse Demo", extractor.extract(jwt).orgName)
+    }
+
+    @Test
+    fun `returns null org name when claim is absent blank or whitespace`() {
+        val absent = jwt(subject = "user-1")
+        val blank = jwt(
+            subject = "user-1",
+            claims = mapOf(JwtUserExtractor.ORG_NAME_CLAIM to ""),
+        )
+        val whitespace = jwt(
+            subject = "user-1",
+            claims = mapOf(JwtUserExtractor.ORG_NAME_CLAIM to "   "),
+        )
+
+        assertNull(extractor.extract(absent).orgName)
+        assertNull(extractor.extract(blank).orgName)
+        assertNull(extractor.extract(whitespace).orgName)
     }
 
     private fun jwt(

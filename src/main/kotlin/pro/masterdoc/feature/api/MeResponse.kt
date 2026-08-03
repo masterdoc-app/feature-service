@@ -5,6 +5,7 @@ data class UserInfoDto(
     val givenName: String?,
     val familyName: String?,
     val email: String?,
+    val orgName: String? = null,
 )
 
 data class MeResponse(

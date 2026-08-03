@@ -8,6 +8,7 @@ data class JwtUserClaims(
     val givenName: String?,
     val familyName: String?,
     val email: String?,
+    val orgName: String?,
     val grantKeys: List<String>,
 )
 
@@ -20,6 +21,7 @@ class JwtUserExtractor {
             givenName = jwt.getClaimAsString("given_name"),
             familyName = jwt.getClaimAsString("family_name"),
             email = jwt.getClaimAsString("email"),
+            orgName = jwt.getClaimAsString(ORG_NAME_CLAIM)?.trim()?.takeIf { it.isNotEmpty() },
             grantKeys = extractGrantKeys(jwt),
         )
     }
@@ -35,5 +37,9 @@ class JwtUserExtractor {
             return rolesClaim.mapNotNull { it as? String }.sorted()
         }
         return emptyList()
+    }
+
+    companion object {
+        const val ORG_NAME_CLAIM = "urn:zitadel:iam:user:resourceowner:name"
     }
 }

@@ -24,6 +24,7 @@ class MeService(
                 givenName = claims.givenName,
                 familyName = claims.familyName,
                 email = claims.email,
+                orgName = claims.orgName,
             ),
             features = features,
         )

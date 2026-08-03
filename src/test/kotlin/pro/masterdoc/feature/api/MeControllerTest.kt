@@ -9,6 +9,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import pro.masterdoc.feature.auth.JwtUserExtractor
 import java.time.Instant
 
 @SpringBootTest
@@ -51,6 +52,41 @@ class MeControllerTest {
             jsonPath("$.userInfo.email") { value("ivan@example.com") }
             jsonPath("$.userInfo.roles") { doesNotExist() }
             jsonPath("$.features[0]") { value("board") }
+        }
+    }
+
+    @Test
+    fun `getMe returns orgName from JWT resource owner claim`() {
+        val token = Jwt.withTokenValue("test-token")
+            .header("alg", "none")
+            .subject("user-1")
+            .claim(JwtUserExtractor.ORG_NAME_CLAIM, "Fixaverse Demo")
+            .issuedAt(Instant.now())
+            .expiresAt(Instant.now().plusSeconds(3600))
+            .build()
+
+        mockMvc.get("/me") {
+            with(jwt().jwt(token))
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.userInfo.orgName") { value("Fixaverse Demo") }
+        }
+    }
+
+    @Test
+    fun `getMe omits orgName when claim is absent`() {
+        val token = Jwt.withTokenValue("test-token")
+            .header("alg", "none")
+            .subject("user-1")
+            .issuedAt(Instant.now())
+            .expiresAt(Instant.now().plusSeconds(3600))
+            .build()
+
+        mockMvc.get("/me") {
+            with(jwt().jwt(token))
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.userInfo.orgName") { doesNotExist() }
         }
     }
 
